@@ -457,7 +457,7 @@ function do_install(packages::Packages)
     end
 end
 
-const exe7z = iswindows() ? joinpath(BINDIR, "7z.exe") : "7z"
+const exe7z = isdefined(Base, :LIBEXECDIR) ? joinpath(BINDIR, Base.LIBEXECDIR, "7z.exe") : joinpath(BINDIR, "7z.exe")
 
 function do_install(package::Package)
     name = names(package)
@@ -526,7 +526,7 @@ end
 
 include("winrpm_bindeps.jl")
 
-# deprecations 
+# deprecations
 @deprecate help() "Please see the README.md file at https://github.com/JuliaPackaging/WinRPM.jl"
 
 end
