@@ -3,5 +3,5 @@ Compat 0.42.0
 URIParser 0.0.3
 @unix HTTPClient 0.0.0
 LibExpat 0.2.8
-Libz
+CodecZlib 0.6.0
 BinDeps 0.3
