@@ -2,11 +2,8 @@ __precompile__()
 
 module WinRPM
 
-using Compat
-using Compat.Sys: iswindows, isunix, BINDIR
-
-if isunix()
-    using HTTPClient.HTTPC
+if Sys.isunix()
+    import HTTP
 end
 
 using CodecZlib, LibExpat, URIParser
@@ -15,7 +12,7 @@ import Base: show, getindex, wait_close, pipeline_error
 
 #export update, whatprovides, search, lookup, install, deps
 
-if iswindows()
+if Sys.iswindows()
     const OS_ARCH = Sys.WORD_SIZE == 64 ? "mingw64" : "mingw32"
 else
     const OS_ARCH = string(Sys.ARCH)
@@ -46,12 +43,12 @@ function __init__()
     update(false, false)
 end
 
-if isunix()
+if Sys.isunix()
     function download(source::AbstractString)
-        x = HTTPC.get(source)
-        unsafe_string(x.body), x.http_code
+        x = HTTP.get(source)
+        String(x.body), x.status
     end
-elseif iswindows()
+elseif Sys.iswindows()
     function download(source::AbstractString; retry=5)
         dest = Vector{UInt16}(undef, 261)
         for i in 1:retry
@@ -500,7 +497,7 @@ function do_install(package::Package)
             wait_close(out)
             println(stdoutstr)
             err = pc
-            if isunix()
+            if Sys.isunix()
                 cd(installdir) do
                     if success(`rpm2cpio $path2` | `cpio -imud`)
                         err = nothing
