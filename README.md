@@ -1,3 +1,5 @@
+**This fork uses CodecZlib.jl over Libz.jl which is both slower and deprecated**
+
 Introduction
 ============
 
